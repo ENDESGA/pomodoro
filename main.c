@@ -52,10 +52,10 @@ int main( int _a, char* _s[] )
 			{
 				P( "\n> Press Enter to Start Pomodoro " );
 				while( getchar() != '\n' ) {};
-				T( 2, 1 );
+				T( 1500, 1 );
 				P( "\n> Press Enter to Start Break " );
 				while( getchar() != '\n' ) {};
-				T( ( c == 4 ) ? 2 : 2, 2 );
+				T( ( c == 4 ) ? 1500 : 300, 2 );
 			}
 			P( "\n> Press Enter to Restart " );
 			while( getchar() != '\n' ) {};
