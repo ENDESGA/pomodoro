@@ -28,8 +28,6 @@ char cc[ 50 ];
 	sprintf( cc, OS ? "./%s %d" : "start %s %d", e, t );                \
 	system( cc )
 
-#define A
-
 int main( int _a, char* _s[] )
 {
 	e = _s[ 0 ];
