@@ -1,47 +1,65 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
 #ifdef _WIN32
-	#include <windows.h>
-	#define B Beep( 77, 777 )
-	#define S( s ) Sleep( s * 1000 )
+	#define OS 0
 	#define C() system( "cls" )
 #else
+	#define OS 1
 	#include <unistd.h>
-	#define B system( "beep -f 77 -l 777 >/dev/null 2>&1 || echo -e '\\007'" )
-	#define S( s ) sleep( s )
 	#define C() system( "clear" )
 #endif
 
-#define P printf
+void S( clock_t t )
+	{
+		clock_t end_time;
+		end_time = clock() + t * CLOCKS_PER_SEC;
+		while( clock() < end_time ) {}
+	};
 
-#define T( c )                                                        \
+#define P printf
+char* e;
+char cc[ 50 ];
+#define T( c, t )                                                     \
 	for( i = c; i--; )                                                  \
 		S( 1 ), g &&P( "\r%02d:%02d", i / 60, i % 60 ), fflush( stdout ); \
 	P( "\n" );                                                          \
-	B
+	sprintf( cc, OS ? "./%s %d" : "start %s %d", e, t );                \
+	system( cc )
 
-int main()
+#define A
+
+int main( int _a, char* _s[] )
 {
-	char ch;
-	int i, g, c = 1;
-	P( "\n> Show progress? (y/n) " );
-	ch = getchar();
-	while( getchar() != '\n' ) {};
-	g = ch == 'y' || ch == 'Y';
-	for(;;)
+	e = _s[ 0 ];
+	if( _a == 2 )
 	{
-		for( c = 1; c < 5; c++ )
-		{
-			P( "\n> Press Enter to Start Pomodoro " );
-			while( getchar() != '\n' ) {};
-			T( 1500 );
-			P( "/////// END OF POMODORO /////// " );
-			P( "\n> Press Enter to Start Break " );
-			while( getchar() != '\n' ) {};
-			T( ( c == 4 ) ? 1500 : 300 );
-			P( "/////// END OF BREAK /////// " );
-		}
-		P( "\n> Press Enter to Restart " );
+		printf( ( _s[ 1 ][ 0 ] == '1' ) ? ( "/////// END OF POMODORO /////// " ) : ( "/////// END OF BREAK /////// " ) );
 		while( getchar() != '\n' ) {};
-		C();
+	}
+	else
+	{
+		char ch;
+		int i, g, c = 1;
+		P( "\n> Show progress? (y/n) " );
+		ch = getchar();
+		while( getchar() != '\n' ) {};
+		g = ch == 'y' || ch == 'Y';
+		for( ;; )
+		{
+			for( c = 1; c < 5; c++ )
+			{
+				P( "\n> Press Enter to Start Pomodoro " );
+				while( getchar() != '\n' ) {};
+				T( 2, 1 );
+				P( "\n> Press Enter to Start Break " );
+				while( getchar() != '\n' ) {};
+				T( ( c == 4 ) ? 2 : 2, 2 );
+			}
+			P( "\n> Press Enter to Restart " );
+			while( getchar() != '\n' ) {};
+			C();
+		}
 	}
 }
