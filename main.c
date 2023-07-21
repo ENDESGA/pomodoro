@@ -3,10 +3,13 @@
 
 #ifdef _WIN32
 	#define OS 0
+	#include <windows.h>
+	#define B Beep( 77, 777 )
 	#define C() system( "cls" )
 #else
 	#define OS 1
 	#include <unistd.h>
+	#define B system( "beep -f 77 -l 777 >/dev/null 2>&1 || echo -e '\\007'" )
 	#define C() system( "clear" )
 #endif
 
@@ -26,7 +29,9 @@ int main( int _a, char* _s[] )
 	if( _a == 2 )
 	{
 		printf( ( _s[ 1 ][ 0 ] == '1' ) ? ( "/////// END OF POMODORO /////// " ) : ( "/////// END OF BREAK /////// " ) );
-		while( getchar() != '\n' ) {};
+		system( "timeout 7 >nul" );
+		B;
+		exit(0);
 	}
 	else
 	{
